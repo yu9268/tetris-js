@@ -43,8 +43,9 @@ function init() {
   }
   
   //テスト
-  // field[19][9] = 1;
-  // field[19][0] = 1;
+  field[ 5][8] = 1;
+  field[19][9] = 1;
+  field[19][0] = 1;
 }
 init();
 drawAll();
@@ -79,25 +80,45 @@ function drawAll(){
       }
     }
   }
-  
+
 }
 
+//当たり判定
+function checkMove( mx, my ) {
+  for (let y = 0; y < TETRI_SIZE; y++) {
+    for (let x = 0; x < TETRI_SIZE; x++) {
+      let nx = tetri_x + mx + x;
+      let ny = tetri_y + my + y;
+      if ( tetri[y][x] ) {
+        if (  field[ny][nx] ||
+              ny < 0 ||
+              nx < 0 ||
+              ny >= FIELD_ROW ||
+              nx >= FIELD_COL
+          ) return false;
+      }
+    }
+  }
+
+  return true;
+}
+
+//キーボードが押された時の処理
 document.onkeydown = function(e) {
   // onkeydown keycode 
 
   switch( e.code ){
     case 'ArrowLeft':
-      tetri_x--;
-      console.log(e.key);
+      if (checkMove(-1, 0))tetri_x--;
       break;
     case 'ArrowUp':
-      tetri_y--;
+      if (checkMove(0, -1))tetri_y--;
       break;
       case 'ArrowRight':
-      tetri_x++;
+      if (checkMove(1, 0))tetri_x++;
       break;
     case 'ArrowDown':
-      tetri_y++;
+      if (checkMove(0, 1))tetri_y++;
       break;
     case 'Space':
       break;
